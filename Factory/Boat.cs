@@ -36,6 +36,9 @@ namespace Factory
                 case BoatType.Yacht:
                     drivingAdjective = "cruises";
                     break;
+                default:
+                    drivingAdjective = "floats";
+                    break;
             }
             return $"The {Make} {Model} {drivingAdjective} through the water.";
         }

@@ -16,5 +16,6 @@ namespace Factory
 
         public DbSet<Car> Cars { get; set; }
         public DbSet<Boat> Boats { get; set; }
+        public DbSet<BankAccount> BankAccounts { get; set; }
     }
 }

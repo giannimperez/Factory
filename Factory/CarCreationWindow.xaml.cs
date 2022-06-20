@@ -26,23 +26,71 @@ namespace Factory
 
         private void SaveCarSpecificationButton_Click(object sender, RoutedEventArgs e)
         {
-            //(ComboBoxItem)cboType.SelectedItem
-            Car car = new Car()
+                // Determines whether to overwrite car or create new car in db
+                if (CarIdLabel.Content != null)
+                    UpdateExistingCar();
+                else
+                    CreateNewCar();
+        }
+
+        /// <summary>
+        /// Creates a new car in db using values from window, then closes window.
+        /// </summary>
+        private void CreateNewCar()
+        {
+            using (var context = new DataContext())
             {
-                //CarType = CarType.Unknown,
+                try
+                {
+                    Car car = new Car()
+                    {
+                        Make = MakeTextBox.Text,
+                        Model = ModelTextBox.Text,
+                        Msrp = Convert.ToDecimal(MsrpTextBox.Text),
+                        CarType = (CarType)CarTypeComboBox.SelectedValue,
+                        TotalEngineDisplacement = Convert.ToDouble(DisplacementTextBox.Text),
+                        NumWheels = Convert.ToInt32(NumWheelsTextBox.Text),
+                    };
+                    context.Cars.Add(car);
+                    context.SaveChanges();
+                    (Owner as CarsWindow).Update();
+                    Close();
+                }
+                catch (Exception ex)
+                {
+                    Window parentWindow = this;
+                    MessageBox.Show(parentWindow, "Please populate all fields", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
 
-/*                Make = MakeTextBox.Text,
-                Model = ModelTextBox.Text,
-                Msrp = (decimal)MsrpTextBox.Text,
-                CarType = (CarType)CarTypeComboBox.SelectedItem,
-                TotalEngineDisplacement = (double)DisplacementTextBox.Text,
-                NumWheels = (int)NumWheelsTextBox.Text*/
-
-
-
-            };
-
-            
+        /// <summary>
+        /// Updates existing car in db using values from window, then closes window.
+        /// </summary>
+        private void UpdateExistingCar()
+        {
+            using (var context = new DataContext())
+            {
+                try
+                {
+                    var car = context.Cars.Find(Convert.ToInt32(CarIdLabel.Content));
+                    car.Make = MakeTextBox.Text;
+                    car.Model = ModelTextBox.Text;
+                    car.Msrp = Convert.ToDecimal(MsrpTextBox.Text);
+                    car.CarType = (CarType)CarTypeComboBox.SelectedValue;
+                    car.TotalEngineDisplacement = Convert.ToDouble(DisplacementTextBox.Text);
+                    car.NumWheels = Convert.ToInt32(NumWheelsTextBox.Text);
+                    context.SaveChanges();
+                    (Owner as CarsWindow).Update();
+                    Close();
+                }
+                catch (Exception ex)
+                {
+                    Window parentWindow = this;
+                    MessageBox.Show(parentWindow, "Please populate all fields", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }
+

@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Factory
 {
-    internal static class BankAccount
+    internal class BankAccount
     {
-        private static decimal _accountTotal = 0.00m;
+        [Key]
+        public int Id { get; set; }
+        public decimal AccountTotal { get; set; } = 0.00m;
+        public int DepositCount { get; set; } = 0;
 
-        public static decimal GetFunds()
+        public void AddFunds(decimal amount)
         {
-            return _accountTotal;
-        }
-
-        public static void AddFunds(decimal amount)
-        {
-            _accountTotal += amount;
+            AccountTotal += amount;
+            DepositCount++;
         }
     }
 }

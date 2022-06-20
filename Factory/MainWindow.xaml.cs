@@ -136,9 +136,9 @@ namespace Factory
             if(car != null)
             {
                 DeleteSelectedCar(car);
-                BankAccount.AddFunds(car.Msrp);
+                //BankAccount.AddFunds(car.Msrp);
                 CarTextBox.Text = $"{car.Make} {car.Model} sold for ${car.Msrp}";
-                ProfitLabel.Content = $"Total Profit: ${BankAccount.GetFunds()}";
+                //ProfitLabel.Content = $"Total Profit: ${BankAccount.GetFunds()}";
             }
                 
         }
