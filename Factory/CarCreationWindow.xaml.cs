@@ -26,11 +26,22 @@ namespace Factory
 
         private void SaveCarSpecificationButton_Click(object sender, RoutedEventArgs e)
         {
+            if (WpfUtils.ChildControlsFilledOut(ControlsGrid))
+            {
+                // Hides "Please populate all fields" message
+                EmptyFieldsErrorLabel.Visibility = Visibility.Hidden;
+
                 // Determines whether to overwrite car or create new car in db
                 if (CarIdLabel.Content != null)
                     UpdateExistingCar();
                 else
                     CreateNewCar();
+            }
+            else
+            {
+                // Displays "Please populate all fields" message
+                EmptyFieldsErrorLabel.Visibility = Visibility.Visible;
+            }
         }
 
         /// <summary>
@@ -49,17 +60,17 @@ namespace Factory
                         Msrp = Convert.ToDecimal(MsrpTextBox.Text),
                         CarType = (CarType)CarTypeComboBox.SelectedValue,
                         TotalEngineDisplacement = Convert.ToDouble(DisplacementTextBox.Text),
-                        NumWheels = Convert.ToInt32(NumWheelsTextBox.Text),
+                        NumWheels = Convert.ToInt32(NumWheelsTextBox.Text)
                     };
                     context.Cars.Add(car);
                     context.SaveChanges();
-                    (Owner as CarsWindow).Update();
+                    (Owner as CarsWindow).Update(); // Updates parent window listview
                     Close();
                 }
                 catch (Exception ex)
                 {
                     Window parentWindow = this;
-                    MessageBox.Show(parentWindow, "Please populate all fields", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(parentWindow, ex.ToString(), "Error creating car", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -93,4 +104,3 @@ namespace Factory
         }
     }
 }
-

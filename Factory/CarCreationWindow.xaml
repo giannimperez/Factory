@@ -26,7 +26,7 @@
             </Grid.ColumnDefinitions>
             <Grid Background="Gray" Grid.Column="1">
                 <Grid Margin="0 0 0 0" Background="White">
-                    <Grid Background="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10">
+                    <Grid x:Name="ControlsGrid" Background="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -67,6 +67,7 @@
                         <Label Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">Number of Wheels</Label>
                         <TextBox x:Name="NumWheelsTextBox" Grid.Column="5" Grid.Row="4" Margin="0 15 0 15" FontSize="18"></TextBox>
 
+                        <Label x:Name="EmptyFieldsErrorLabel" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="5" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="Red" Visibility="Hidden" >Please populate all fields</Label>
                         <Button x:Name="SaveCarSpecificationButton" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="6" Margin="15 10 15 10" Content="Create New" FontSize="18" Click="SaveCarSpecificationButton_Click" />
 
 

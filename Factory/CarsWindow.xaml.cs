@@ -56,29 +56,45 @@ namespace Factory
                 // Populate car listview
                 for (int i = 0; i < myCars.Count(); i++)
                 {
-                    DataRow dr = dt.NewRow();
-                    dr["Id"] = myCars[i].Id;
-                    dr["Make"] = myCars[i].Make;
-                    dr["Model"] = myCars[i].Model;
-                    dr["Msrp"] = myCars[i].Msrp;
-                    dr["CarType"] = myCars[i].CarType.ToString();
-                    dr["TotalEngineDisplacement"] = myCars[i].TotalEngineDisplacement;
-                    dr["ManufactureDate"] = myCars[i].ManufactureDate;
-                    dr["NumWheels"] = myCars[i].NumWheels;
-                    dt.Rows.Add(dr);
-                    dt.AcceptChanges();
-                    CarListView.ItemsSource = dt.DefaultView;
+                    try
+                    {
+                        DataRow dr = dt.NewRow();
+                        dr["Id"] = myCars[i].Id;
+                        dr["Make"] = myCars[i].Make;
+                        dr["Model"] = myCars[i].Model;
+                        dr["Msrp"] = myCars[i].Msrp;
+                        dr["CarType"] = myCars[i].CarType.ToString();
+                        dr["TotalEngineDisplacement"] = myCars[i].TotalEngineDisplacement;
+                        dr["ManufactureDate"] = myCars[i].ManufactureDate;
+                        dr["NumWheels"] = myCars[i].NumWheels;
+                        dt.Rows.Add(dr);
+                        dt.AcceptChanges();
+                        CarListView.ItemsSource = dt.DefaultView;
+                    }
+                    catch (Exception ex)
+                    {
+                        Window parentWindow = this;
+                        MessageBox.Show(parentWindow, ex.ToString(), "Error populating listview", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
 
                 // Populate total profit label
-                var bankAccount = context.BankAccounts.Find(1);
-                if (bankAccount == null)
+                try
                 {
-                    bankAccount = new BankAccount();
-                    context.BankAccounts.Add(bankAccount);
+                    var bankAccount = context.BankAccounts.Find(1);
+                    if (bankAccount == null)
+                    {
+                        bankAccount = new BankAccount();
+                        context.BankAccounts.Add(bankAccount);
+                    }
+                    ProfitLabel.Content = $"Total Profit: ${bankAccount.AccountTotal}";
+                    context.SaveChanges();
                 }
-                ProfitLabel.Content = $"Total Profit: ${bankAccount.AccountTotal}";
-                context.SaveChanges();
+                catch (Exception ex)
+                {
+                    Window parentWindow = this;
+                    MessageBox.Show(parentWindow, ex.ToString(), "Error populating profit label", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
@@ -89,53 +105,94 @@ namespace Factory
             var car = GetCarFromSelection(selectedItem);
             if (car != null)
             {
-                CarCreationWindow carCreationWindow = new CarCreationWindow();
-                carCreationWindow.Owner = this;
-                carCreationWindow.MakeTextBox.Text = car.Make;
-                carCreationWindow.ModelTextBox.Text = car.Model;
-                carCreationWindow.MsrpTextBox.Text = car.Msrp.ToString();
-                carCreationWindow.CarTypeComboBox.SelectedIndex = (int)car.CarType;
-                carCreationWindow.DisplacementTextBox.Text = car.TotalEngineDisplacement.ToString();
-                carCreationWindow.NumWheelsTextBox.Text = car.NumWheels.ToString();
-                carCreationWindow.EditOrCreateLabel.Content = "Editing car:";
-                carCreationWindow.CarIdLabel.Content = car.Id.ToString();
-                carCreationWindow.SaveCarSpecificationButton.Content = "Save Changes";
-                carCreationWindow.ShowDialog();
+                try
+                {
+                    CarCreationWindow carCreationWindow = new CarCreationWindow();
+                    carCreationWindow.Owner = this;
+                    carCreationWindow.MakeTextBox.Text = car.Make;
+                    carCreationWindow.ModelTextBox.Text = car.Model;
+                    carCreationWindow.MsrpTextBox.Text = car.Msrp.ToString();
+                    carCreationWindow.CarTypeComboBox.SelectedIndex = (int)car.CarType;
+                    carCreationWindow.DisplacementTextBox.Text = car.TotalEngineDisplacement.ToString();
+                    carCreationWindow.NumWheelsTextBox.Text = car.NumWheels.ToString();
+                    carCreationWindow.EditOrCreateLabel.Content = "Editing car:";
+                    carCreationWindow.CarIdLabel.Content = car.Id.ToString();
+                    carCreationWindow.SaveCarSpecificationButton.Content = "Save Changes";
+                    carCreationWindow.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    Window parentWindow = this;
+                    MessageBox.Show(parentWindow, ex.ToString(), "Error opening edit window", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
         private void DeleteCarButton_Click(object sender, RoutedEventArgs e)
         {
             // Deletes selected car
-            var selectedItem = CarListView.SelectedItem as DataRowView;
-            DeleteSelectedCar(GetCarFromSelection(selectedItem));
+            try
+            {
+                var selectedItem = CarListView.SelectedItem as DataRowView;
+                DeleteSelectedCar(GetCarFromSelection(selectedItem));
+            }
+            catch (Exception ex)
+            {
+                Window parentWindow = this;
+                MessageBox.Show(parentWindow, ex.ToString(), "Error deleting vehicle", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void CreateCarButton_Click(object sender, RoutedEventArgs e)
         {
             // Opens CarCreationWindow with blank fields
-            CarCreationWindow carCreationWindow = new CarCreationWindow();
-            carCreationWindow.Owner = this;
-
-            carCreationWindow.EditOrCreateLabel.Content = "Creating car";
-            carCreationWindow.SaveCarSpecificationButton.Content = "Create";
-            carCreationWindow.ShowDialog();
+            try
+            {
+                CarCreationWindow carCreationWindow = new CarCreationWindow();
+                carCreationWindow.Owner = this;
+                carCreationWindow.EditOrCreateLabel.Content = "Creating car";
+                carCreationWindow.SaveCarSpecificationButton.Content = "Create";
+                carCreationWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Window parentWindow = this;
+                MessageBox.Show(parentWindow, ex.ToString(), "Error opening create window", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void DriveButton_Click(object sender, RoutedEventArgs e)
         {
             // Displays driving message
-            var selectedItem = CarListView.SelectedItem as DataRowView;
-            var car = GetCarFromSelection(selectedItem);
-            if (car != null)
-                CarTextBox.Text = car.Drive();
+            try
+            {
+                var selectedItem = CarListView.SelectedItem as DataRowView;
+                var car = GetCarFromSelection(selectedItem);
+                if (car != null)
+                    CarTextBox.Text = car.Drive();
+            }
+            catch (Exception ex)
+            {
+                Window parentWindow = this;
+                MessageBox.Show(parentWindow, ex.ToString(), "Error driving vehicle", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
 
         private void SellButton_Click(object sender, RoutedEventArgs e)
         {
             // Deletes car and adds Msrp to AccountTotal
-            var selectedItem = CarListView.SelectedItem as DataRowView;
-            SellSelectedCar(GetCarFromSelection(selectedItem));
+            try
+            {
+                var selectedItem = CarListView.SelectedItem as DataRowView;
+                SellSelectedCar(GetCarFromSelection(selectedItem));
+            }
+            catch (Exception ex)
+            {
+                Window parentWindow = this;
+                MessageBox.Show(parentWindow, ex.ToString(), "Error selling vehicle", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
 
         /// <summary>
@@ -184,7 +241,7 @@ namespace Factory
         /// <param name="car">Car to be sold and deleted from database.</param>
         private void SellSelectedCar(Car car)
         {
-            if(car != null)
+            if (car != null)
             {
                 BankAccount bankAccount;
                 using (var context = new DataContext())
@@ -193,9 +250,9 @@ namespace Factory
                     bankAccount.AddFunds(car.Msrp);
                     context.SaveChanges();
                 }
+                DeleteSelectedCar(car);
                 CarTextBox.Text = $"{car.Make} {car.Model} sold for ${car.Msrp}";
                 ProfitLabel.Content = $"Total Profit: ${bankAccount.AccountTotal}";
-                DeleteSelectedCar(car);
             }
         }
     }
