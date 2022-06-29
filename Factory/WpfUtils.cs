@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Factory
 {
     public static class WpfUtils
     {
+        // Currently active WPF window
+        public static Window CurrentWindow = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+
         /// <summary>
         /// Checks if all child controls of a Grid are populated with values, 
         /// given they are of type TextBox or ComboBox.
         /// </summary>
         /// <param name="parentGrid">Grid which contains child controls to be checked.</param>
         /// <returns>True if all child TextBoxes and/or ComboBoxes are populated with values.</returns>
-            public static bool ChildControlsFilledOut(Grid parentGrid)
+        public static bool ChildControlsFilledOut(Grid parentGrid)
             {
                 foreach (var control in parentGrid.Children.OfType<Control>())
                 {

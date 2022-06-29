@@ -27,7 +27,8 @@ namespace Factory
         }
 
         /// <summary>
-        /// Executes necessary startup actions.
+        /// Executes necessary startup actions. 
+        /// Should only be called once.
         /// </summary>
         private void Startup()
         {
@@ -43,7 +44,8 @@ namespace Factory
         }
 
         /// <summary>
-        /// Updates the data of various components.
+        /// Updates the data of various components. 
+        /// Can be called as needed.
         /// </summary>
         public void Update()
         {
@@ -93,14 +95,14 @@ namespace Factory
                 catch (Exception ex)
                 {
                     Window parentWindow = this;
-                    MessageBox.Show(parentWindow, ex.ToString(), "Error populating profit label", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(parentWindow, ex.ToString(), "Error populating total profit label", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
 
+        // Opens CarCreationWindow with fields populated for selected car using data from db
         private void EditCarButton_Click(object sender, RoutedEventArgs e)
         {
-            // Opens CarCreationWindow with fields populated for selected car using data from db
             var selectedItem = CarListView.SelectedItem as DataRowView;
             var car = GetCarFromSelection(selectedItem);
             if (car != null)
@@ -128,24 +130,28 @@ namespace Factory
             }
         }
 
+        // Deletes selected car
         private void DeleteCarButton_Click(object sender, RoutedEventArgs e)
         {
-            // Deletes selected car
             try
             {
                 var selectedItem = CarListView.SelectedItem as DataRowView;
-                DeleteSelectedCar(GetCarFromSelection(selectedItem));
+                var car = GetCarFromSelection(selectedItem);
+                VehicleUtils.DeleteVehicle(car);
+                if(car != null)
+                    CarTextBox.Text = $"Deleted vehicle with Id: {car.Id}";
             }
             catch (Exception ex)
             {
                 Window parentWindow = this;
                 MessageBox.Show(parentWindow, ex.ToString(), "Error deleting vehicle", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            Update();
         }
 
+        // Opens CarCreationWindow with blank fields
         private void CreateCarButton_Click(object sender, RoutedEventArgs e)
         {
-            // Opens CarCreationWindow with blank fields
             try
             {
                 CarCreationWindow carCreationWindow = new CarCreationWindow();
@@ -161,9 +167,9 @@ namespace Factory
             }
         }
 
+        // Displays driving message
         private void DriveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Displays driving message
             try
             {
                 var selectedItem = CarListView.SelectedItem as DataRowView;
@@ -176,23 +182,25 @@ namespace Factory
                 Window parentWindow = this;
                 MessageBox.Show(parentWindow, ex.ToString(), "Error driving vehicle", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
         }
 
+        // Deletes car and adds Msrp to AccountTotal
         private void SellButton_Click(object sender, RoutedEventArgs e)
         {
-            // Deletes car and adds Msrp to AccountTotal
             try
             {
                 var selectedItem = CarListView.SelectedItem as DataRowView;
-                SellSelectedCar(GetCarFromSelection(selectedItem));
+                var car = GetCarFromSelection(selectedItem);
+                VehicleUtils.SellVehicle(car);
+                if (car != null)
+                    CarTextBox.Text = $"{car.Make} {car.Model} sold for ${car.Msrp}";
             }
             catch (Exception ex)
             {
                 Window parentWindow = this;
                 MessageBox.Show(parentWindow, ex.ToString(), "Error selling vehicle", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
+            Update();
         }
 
         /// <summary>
@@ -204,55 +212,25 @@ namespace Factory
         {
             if (selectedItem != null)
             {
-                var selectedItemId = Convert.ToInt32(selectedItem["Id"]);
-                using (var context = new DataContext())
+                try
                 {
-                    return context.Cars.Find(selectedItemId);
+                    var selectedItemId = Convert.ToInt32(selectedItem["Id"]);
+                    using (var context = new DataContext())
+                    {
+                        return context.Cars.Find(selectedItemId);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Window parentWindow = this;
+                    MessageBox.Show(parentWindow, ex.ToString(), "Error retrieving selected car from database", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
                 }
             }
             else
             {
-                CarTextBox.Text = "Please select a car";
+                CarTextBox.Text = "No car selected";
                 return null;
-            }
-        }
-
-        /// <summary>
-        /// Deletes a car from database and updates CarTextBox message.
-        /// </summary>
-        /// <param name="car">Car to be deleted from database.</param>
-        private void DeleteSelectedCar(Car car)
-        {
-            if (car != null)
-            {
-                using (var context = new DataContext())
-                {
-                    context.Cars.Remove(car);
-                    context.SaveChanges();
-                }
-                CarTextBox.Text = $"Deleted car with Id: {car.Id}";
-                Update();
-            }
-        }
-
-        /// <summary>
-        /// Deletes a car from database, updates CarTextBox message and adds car's Msrp to AccountTotal.
-        /// </summary>
-        /// <param name="car">Car to be sold and deleted from database.</param>
-        private void SellSelectedCar(Car car)
-        {
-            if (car != null)
-            {
-                BankAccount bankAccount;
-                using (var context = new DataContext())
-                {
-                    bankAccount = context.BankAccounts.Find(1);
-                    bankAccount.AddFunds(car.Msrp);
-                    context.SaveChanges();
-                }
-                DeleteSelectedCar(car);
-                CarTextBox.Text = $"{car.Make} {car.Model} sold for ${car.Msrp}";
-                ProfitLabel.Content = $"Total Profit: ${bankAccount.AccountTotal}";
             }
         }
     }
