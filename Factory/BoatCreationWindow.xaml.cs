@@ -15,27 +15,27 @@ using System.Windows.Shapes;
 namespace Factory
 {
     /// <summary>
-    /// Interaction logic for CarCreationWindow.xaml
+    /// Interaction logic for BoatCreationWindow.xaml
     /// </summary>
-    public partial class CarCreationWindow : Window
+    public partial class BoatCreationWindow : Window
     {
-        public CarCreationWindow()
+        public BoatCreationWindow()
         {
             InitializeComponent();
         }
 
-        private void SaveCarSpecificationButton_Click(object sender, RoutedEventArgs e)
+        private void SaveBoatSpecificationButton_Click(object sender, RoutedEventArgs e)
         {
             if (WpfUtils.ChildControlsFilledOut(ControlsGrid))
             {
                 // Hides "Please populate all fields" message
                 EmptyFieldsErrorLabel.Content = "";
 
-                // Determines whether to overwrite car or create new car in db
-                if (CarIdLabel.Content != null)
-                    UpdateExistingCar();
+                // Determines whether to overwrite boat or create new boat in db
+                if (BoatIdLabel.Content != null)
+                    UpdateExistingBoat();
                 else
-                    CreateNewCar();
+                    CreateNewBoat();
             }
             else
             {
@@ -44,26 +44,26 @@ namespace Factory
         }
 
         /// <summary>
-        /// Creates a new car in db using values from window, then closes window.
+        /// Creates a new boat in db using values from window, then closes window.
         /// </summary>
-        private void CreateNewCar()
+        private void CreateNewBoat()
         {
             using (var context = new DataContext())
             {
                 try
                 {
-                    Car car = new Car()
+                    Boat boat = new Boat()
                     {
                         Make = MakeTextBox.Text,
                         Model = ModelTextBox.Text,
                         Msrp = Convert.ToDecimal(MsrpTextBox.Text),
-                        CarType = (CarType)CarTypeComboBox.SelectedValue,
+                        BoatType = (BoatType)BoatTypeComboBox.SelectedValue,
                         TotalEngineDisplacement = Convert.ToDouble(DisplacementTextBox.Text),
-                        NumWheels = Convert.ToInt32(NumWheelsTextBox.Text)
+                        Length = Convert.ToInt32(LengthTextBox.Text)
                     };
-                    context.Cars.Add(car);
+                    context.Boats.Add(boat);
                     context.SaveChanges();
-                    (Owner as CarsWindow).Update(); // Updates parent window listview
+                    (Owner as BoatsWindow).Update(); // Updates parent window listview
                     Close();
                 }
                 catch (FormatException)
@@ -73,29 +73,29 @@ namespace Factory
                 catch (Exception ex)
                 {
                     Window parentWindow = this;
-                    MessageBox.Show(parentWindow, ex.ToString(), "Error creating car", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(parentWindow, ex.ToString(), "Error creating boat", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
 
         /// <summary>
-        /// Updates existing car in db using values from window, then closes window.
+        /// Updates existing boat in db using values from window, then closes window.
         /// </summary>
-        private void UpdateExistingCar()
+        private void UpdateExistingBoat()
         {
             using (var context = new DataContext())
             {
                 try
                 {
-                    var car = context.Cars.Find(Convert.ToInt32(CarIdLabel.Content));
-                    car.Make = MakeTextBox.Text;
-                    car.Model = ModelTextBox.Text;
-                    car.Msrp = Convert.ToDecimal(MsrpTextBox.Text);
-                    car.CarType = (CarType)CarTypeComboBox.SelectedValue;
-                    car.TotalEngineDisplacement = Convert.ToDouble(DisplacementTextBox.Text);
-                    car.NumWheels = Convert.ToInt32(NumWheelsTextBox.Text);
+                    var boat = context.Boats.Find(Convert.ToInt32(BoatIdLabel.Content));
+                    boat.Make = MakeTextBox.Text;
+                    boat.Model = ModelTextBox.Text;
+                    boat.Msrp = Convert.ToDecimal(MsrpTextBox.Text);
+                    boat.BoatType = (BoatType)BoatTypeComboBox.SelectedValue;
+                    boat.TotalEngineDisplacement = Convert.ToDouble(DisplacementTextBox.Text);
+                    boat.Length = Convert.ToInt32(LengthTextBox.Text);
                     context.SaveChanges();
-                    (Owner as CarsWindow).Update();
+                    (Owner as BoatsWindow).Update();
                     Close();
                 }
                 catch (Exception ex)

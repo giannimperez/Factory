@@ -1,4 +1,4 @@
-﻿<Window x:Class="Factory.CarCreationWindow"
+﻿<Window x:Class="Factory.BoatCreationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,17 +6,17 @@
         xmlns:local="clr-namespace:Factory"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Car Editor" Height="450" Width="800"
+        Title="Boat Editor" Height="450" Width="800"
         WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
         <ObjectDataProvider x:Key="DataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local:CarType"/>
+                <x:Type TypeName="local:BoatType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
-    
+
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -47,10 +47,10 @@
                         </Grid.RowDefinitions>
 
                         <Label x:Name="EditOrCreateLabel" Grid.Column="0" Grid.Row="0"
-                               HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18">Editing car: </Label>
-                        <Label x:Name="CarIdLabel" Grid.Column="1" Grid.Row="0"
+                               HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18">Editing boat:</Label>
+                        <Label x:Name="BoatIdLabel" Grid.Column="1" Grid.Row="0"
                                HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18"></Label>
-                        <Label Grid.Column="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" FontSize="36">Car Specifications</Label>
+                        <Label Grid.Column="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" FontSize="36">Boat Specifications</Label>
 
 
                         <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">Make</Label>
@@ -58,17 +58,17 @@
                         <Label Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">Model</Label>
                         <TextBox x:Name="ModelTextBox" Grid.Column="1" Grid.Row="3" Margin="0 15 0 15" FontSize="18"></TextBox>
                         <Label Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">MSRP</Label>
-                        <TextBox x:Name="MsrpTextBox" Grid.Column="1" Grid.Row="4" Margin="0 15 0 15" FontSize="18"></TextBox>
+                        <TextBox x:Name="MsrpTextBox" Grid.Column="1" Grid.Row="4" Margin="0 15 0 15" FontSize="18"></TextBox>  
 
-                        <Label Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">Car Type</Label>
-                        <ComboBox x:Name="CarTypeComboBox" Grid.Row="2" Grid.Column="5" Margin="0 15 0 15" ItemsSource="{Binding Source={StaticResource DataFromEnum}}"/>
+                        <Label Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">Boat Type</Label>
+                        <ComboBox x:Name="BoatTypeComboBox" Grid.Row="2" Grid.Column="5" Margin="0 15 0 15" ItemsSource="{Binding Source={StaticResource DataFromEnum}}"/>
                         <Label Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">Engine Displacement</Label>
                         <TextBox x:Name="DisplacementTextBox" Grid.Column="5" Grid.Row="3" Margin="0 15 0 15" FontSize="18"></TextBox>
-                        <Label Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">Number of Wheels</Label>
-                        <TextBox x:Name="NumWheelsTextBox" Grid.Column="5" Grid.Row="4" Margin="0 15 0 15" FontSize="18"></TextBox>
+                        <Label Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18">Length (ft)</Label>
+                        <TextBox x:Name="LengthTextBox" Grid.Column="5" Grid.Row="4" Margin="0 15 0 15" FontSize="18"></TextBox>
 
-                        <Label x:Name="EmptyFieldsErrorLabel" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="5" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="Red" Visibility="Visible" ></Label>
-                        <Button x:Name="SaveCarSpecificationButton" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="6" Margin="15 10 15 10" Content="Create New" FontSize="18" Click="SaveCarSpecificationButton_Click" />
+                        <Label x:Name="EmptyFieldsErrorLabel" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="5" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="Red" Visibility="Visible"> </Label>
+                        <Button x:Name="SaveBoatSpecificationButton" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="6" Margin="15 10 15 10" Content="Create New" FontSize="18" Click="SaveBoatSpecificationButton_Click" />
 
 
                     </Grid>

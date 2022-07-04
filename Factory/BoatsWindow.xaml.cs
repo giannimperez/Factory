@@ -15,11 +15,14 @@ using System.Windows.Shapes;
 
 namespace Factory
 {
-    public partial class CarsWindow : Window
+    /// <summary>
+    /// Interaction logic for BoatsWindow.xaml
+    /// </summary>
+    public partial class BoatsWindow : Window
     {
         DataTable dt = new DataTable();
 
-        public CarsWindow()
+        public BoatsWindow()
         {
             InitializeComponent();
             Startup();
@@ -37,10 +40,10 @@ namespace Factory
             dt.Columns.Add("Make");
             dt.Columns.Add("Model");
             dt.Columns.Add("Msrp");
-            dt.Columns.Add("CarType");
+            dt.Columns.Add("BoatType");
             dt.Columns.Add("TotalEngineDisplacement");
             dt.Columns.Add("ManufactureDate");
-            dt.Columns.Add("NumWheels");
+            dt.Columns.Add("Length");
         }
 
         /// <summary>
@@ -49,29 +52,29 @@ namespace Factory
         /// </summary>
         public void Update()
         {
-            // dt must be cleared to update CarListView
+            // dt must be cleared to update BoatListView
             dt.Clear();
             using (var context = new DataContext())
             {
-                var myCars = context.Cars.ToList();
+                var myBoats = context.Boats.ToList();
 
-                // Populate car listview
-                for (int i = 0; i < myCars.Count(); i++)
+                // Populate boat listview
+                for (int i = 0; i < myBoats.Count(); i++)
                 {
                     try
                     {
                         DataRow dr = dt.NewRow();
-                        dr["Id"] = myCars[i].Id;
-                        dr["Make"] = myCars[i].Make;
-                        dr["Model"] = myCars[i].Model;
-                        dr["Msrp"] = myCars[i].Msrp;
-                        dr["CarType"] = myCars[i].CarType.ToString();
-                        dr["TotalEngineDisplacement"] = myCars[i].TotalEngineDisplacement;
-                        dr["ManufactureDate"] = myCars[i].ManufactureDate;
-                        dr["NumWheels"] = myCars[i].NumWheels;
+                        dr["Id"] = myBoats[i].Id;
+                        dr["Make"] = myBoats[i].Make;
+                        dr["Model"] = myBoats[i].Model;
+                        dr["Msrp"] = myBoats[i].Msrp;
+                        dr["BoatType"] = myBoats[i].BoatType.ToString();
+                        dr["TotalEngineDisplacement"] = myBoats[i].TotalEngineDisplacement;
+                        dr["ManufactureDate"] = myBoats[i].ManufactureDate;
+                        dr["Length"] = myBoats[i].Length;
                         dt.Rows.Add(dr);
                         dt.AcceptChanges();
-                        CarListView.ItemsSource = dt.DefaultView;
+                        BoatListView.ItemsSource = dt.DefaultView;
                     }
                     catch (Exception ex)
                     {
@@ -100,27 +103,27 @@ namespace Factory
             }
         }
 
-        // Opens CarCreationWindow with fields populated for selected car using data from db
-        private void EditCarButton_Click(object sender, RoutedEventArgs e)
+        // Opens BoatCreationWindow with fields populated for selected boat using data from db
+        private void EditBoatButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = CarListView.SelectedItem as DataRowView;
-            var car = GetCarFromSelection(selectedItem);
-            if (car != null)
+            var selectedItem = BoatListView.SelectedItem as DataRowView;
+            var boat = GetBoatFromSelection(selectedItem);
+            if (boat != null)
             {
                 try
                 {
-                    CarCreationWindow carCreationWindow = new CarCreationWindow();
-                    carCreationWindow.Owner = this;
-                    carCreationWindow.MakeTextBox.Text = car.Make;
-                    carCreationWindow.ModelTextBox.Text = car.Model;
-                    carCreationWindow.MsrpTextBox.Text = car.Msrp.ToString();
-                    carCreationWindow.CarTypeComboBox.SelectedIndex = (int)car.CarType;
-                    carCreationWindow.DisplacementTextBox.Text = car.TotalEngineDisplacement.ToString();
-                    carCreationWindow.NumWheelsTextBox.Text = car.NumWheels.ToString();
-                    carCreationWindow.EditOrCreateLabel.Content = "Editing car:";
-                    carCreationWindow.CarIdLabel.Content = car.Id.ToString();
-                    carCreationWindow.SaveCarSpecificationButton.Content = "Save Changes";
-                    carCreationWindow.ShowDialog();
+                    BoatCreationWindow boatCreationWindow = new BoatCreationWindow();
+                    boatCreationWindow.Owner = this;
+                    boatCreationWindow.MakeTextBox.Text = boat.Make;
+                    boatCreationWindow.ModelTextBox.Text = boat.Model;
+                    boatCreationWindow.MsrpTextBox.Text = boat.Msrp.ToString();
+                    boatCreationWindow.BoatTypeComboBox.SelectedIndex = (int)boat.BoatType;
+                    boatCreationWindow.DisplacementTextBox.Text = boat.TotalEngineDisplacement.ToString();
+                    boatCreationWindow.LengthTextBox.Text = boat.Length.ToString();
+                    boatCreationWindow.EditOrCreateLabel.Content = "Editing boat:";
+                    boatCreationWindow.BoatIdLabel.Content = boat.Id.ToString();
+                    boatCreationWindow.SaveBoatSpecificationButton.Content = "Save Changes";
+                    boatCreationWindow.ShowDialog();
                 }
                 catch (Exception ex)
                 {
@@ -130,16 +133,16 @@ namespace Factory
             }
         }
 
-        // Deletes selected car
-        private void DeleteCarButton_Click(object sender, RoutedEventArgs e)
+        // Deletes selected boat
+        private void DeleteBoatButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var selectedItem = CarListView.SelectedItem as DataRowView;
-                var car = GetCarFromSelection(selectedItem);
-                VehicleUtils.DeleteVehicle(car);
-                if(car != null)
-                    CarTextBox.Text = $"Deleted vehicle with Id: {car.Id}";
+                var selectedItem = BoatListView.SelectedItem as DataRowView;
+                var boat = GetBoatFromSelection(selectedItem);
+                VehicleUtils.DeleteVehicle(boat);
+                if (boat != null)
+                    BoatTextBox.Text = $"Deleted vehicle with Id: {boat.Id}";
             }
             catch (Exception ex)
             {
@@ -149,16 +152,16 @@ namespace Factory
             Update();
         }
 
-        // Opens CarCreationWindow with blank fields
-        private void CreateCarButton_Click(object sender, RoutedEventArgs e)
+        // Opens BoatCreationWindow with blank fields
+        private void CreateBoatButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                CarCreationWindow carCreationWindow = new CarCreationWindow();
-                carCreationWindow.Owner = this;
-                carCreationWindow.EditOrCreateLabel.Content = "Creating car";
-                carCreationWindow.SaveCarSpecificationButton.Content = "Create";
-                carCreationWindow.ShowDialog();
+                BoatCreationWindow boatCreationWindow = new BoatCreationWindow();
+                boatCreationWindow.Owner = this;
+                boatCreationWindow.EditOrCreateLabel.Content = "Creating boat";
+                boatCreationWindow.SaveBoatSpecificationButton.Content = "Create";
+                boatCreationWindow.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -172,10 +175,10 @@ namespace Factory
         {
             try
             {
-                var selectedItem = CarListView.SelectedItem as DataRowView;
-                var car = GetCarFromSelection(selectedItem);
-                if (car != null)
-                    CarTextBox.Text = car.Drive();
+                var selectedItem = BoatListView.SelectedItem as DataRowView;
+                var boat = GetBoatFromSelection(selectedItem);
+                if (boat != null)
+                    BoatTextBox.Text = boat.Drive();
             }
             catch (Exception ex)
             {
@@ -184,16 +187,16 @@ namespace Factory
             }
         }
 
-        // Deletes car and adds Msrp to AccountTotal
+        // Deletes boat and adds Msrp to AccountTotal
         private void SellButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var selectedItem = CarListView.SelectedItem as DataRowView;
-                var car = GetCarFromSelection(selectedItem);
-                VehicleUtils.SellVehicle(car);
-                if (car != null)
-                    CarTextBox.Text = $"{car.Make} {car.Model} sold for ${car.Msrp}";
+                var selectedItem = BoatListView.SelectedItem as DataRowView;
+                var boat = GetBoatFromSelection(selectedItem);
+                VehicleUtils.SellVehicle(boat);
+                if (boat != null)
+                    BoatTextBox.Text = $"{boat.Make} {boat.Model} sold for ${boat.Msrp}";
             }
             catch (Exception ex)
             {
@@ -204,11 +207,11 @@ namespace Factory
         }
 
         /// <summary>
-        /// Gets a car from database using Id acquired from a listview selection.
+        /// Gets a boat from database using Id acquired from a listview selection.
         /// </summary>
-        /// <param name="selectedItem">Listview item with Id that correlates to a car in database.</param>
-        /// <returns>Car acquired from db.</returns>
-        private Car GetCarFromSelection(DataRowView selectedItem)
+        /// <param name="selectedItem">Listview item with Id that correlates to a boat in database.</param>
+        /// <returns>Boat acquired from db.</returns>
+        private Boat GetBoatFromSelection(DataRowView selectedItem)
         {
             if (selectedItem != null)
             {
@@ -217,19 +220,19 @@ namespace Factory
                     var selectedItemId = Convert.ToInt32(selectedItem["Id"]);
                     using (var context = new DataContext())
                     {
-                        return context.Cars.Find(selectedItemId);
+                        return context.Boats.Find(selectedItemId);
                     }
                 }
                 catch (Exception ex)
                 {
                     Window parentWindow = this;
-                    MessageBox.Show(parentWindow, ex.ToString(), "Error retrieving selected car from database", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(parentWindow, ex.ToString(), "Error retrieving selected boat from database", MessageBoxButton.OK, MessageBoxImage.Error);
                     return null;
                 }
             }
             else
             {
-                CarTextBox.Text = "No car selected";
+                BoatTextBox.Text = "No boat selected";
                 return null;
             }
         }
