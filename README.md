@@ -24,3 +24,36 @@ Practices followed:
 
 Potential improvements:
 - Make the WPF forms populate data dynamically based on which vehicle type is selected (boat, car) to reduce ammount of needed windows/code.
+
+
+
+
+![image](https://user-images.githubusercontent.com/36053371/177199041-0f6e1f4b-b687-4cf6-9f87-aabce145b6c3.png)
+
+![image](https://user-images.githubusercontent.com/36053371/177199080-7ad90278-39d1-4d1e-bd36-677a7207d300.png)
+
+![image](https://user-images.githubusercontent.com/36053371/177199202-5f6181e6-070e-44ef-a9b0-a0d04e89741d.png)
+
+![image](https://user-images.githubusercontent.com/36053371/177199329-3ea8ac2b-4f63-44bf-90b3-35cfb6d48399.png)
+
+![image](https://user-images.githubusercontent.com/36053371/177199391-22bfc7a8-03e4-461b-b383-38e92fbb67b6.png)
+
+Driving message "Sails through the water"
+![image](https://user-images.githubusercontent.com/36053371/177199448-cf3243e2-9643-43f5-b74c-54ed71b6f044.png)
+
+Driving message "Rushes through the water"
+![image](https://user-images.githubusercontent.com/36053371/177199468-8c29c434-d683-41e9-bd6f-1ba7162f610a.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
