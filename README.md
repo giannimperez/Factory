@@ -12,7 +12,7 @@ Technologies used:
 - Entity Framework Core for object-database mapping and interaction with the database.
 - SQLite database engine for quick and easy development. (Not practical at larger scale).
 
-Practices followed:
+Concepts used:
 - Classes are created in a way which supports Entity Framework object-database mapping.
 - Both 'Car' and 'Boat' are inherited from the abstract class 'Vehicle'.
 - Polymorphism is used as a means to change the test driving message, based on which vehicle is calling it.
