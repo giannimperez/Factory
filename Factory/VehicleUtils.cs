@@ -22,11 +22,18 @@ namespace Factory
             {
                 using (var context = new DataContext())
                 {
-                    if(vehicle is Car)
-                        context.Cars.Remove((Car)vehicle);
-                    else if(vehicle is Boat)
-                        context.Boats.Remove((Boat)vehicle);
-                    context.SaveChanges();
+                    try
+                    {
+                        if (vehicle is Car)
+                            context.Cars.Remove((Car)vehicle);
+                        else if (vehicle is Boat)
+                            context.Boats.Remove((Boat)vehicle);
+                        context.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "Error deleting vehicle from database", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
@@ -39,15 +46,21 @@ namespace Factory
         {
             if (vehicle != null)
             {
-                    BankAccount bankAccount;
-                    using (var context = new DataContext())
+                BankAccount bankAccount;
+                using (var context = new DataContext())
+                {
+                    try
                     {
                         bankAccount = context.BankAccounts.Find(1);
                         bankAccount.AddFunds(vehicle.Msrp);
                         context.SaveChanges();
                     }
-
-                    DeleteVehicle(vehicle);
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString(), "Error Selling vehicle and adding funds", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                DeleteVehicle(vehicle);
             }
         }
     }
