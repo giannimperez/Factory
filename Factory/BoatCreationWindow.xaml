@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Factory"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Boat Editor" Height="450" Width="800"
+        Title="Factory" Height="450" Width="800" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner">
 
     <Window.Resources>

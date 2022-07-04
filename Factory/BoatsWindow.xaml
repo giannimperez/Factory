@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Factory"
         mc:Ignorable="d"
-        Title="Boats" Height="600" Width="1000"
-        MinHeight="550" MinWidth="900">
+        Title="Factory" Height="600" Width="1000" ResizeMode="NoResize">
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>

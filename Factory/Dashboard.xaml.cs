@@ -25,39 +25,51 @@ namespace Factory
             Startup();
         }
 
+        /// <summary>
+        /// Executes necessary startup actions. 
+        /// Should only be called once.
+        /// </summary>
         public void Startup()
         {
             using (var context = new DataContext())
             {
-                // Populate total data
-                var bankAccount = context.BankAccounts.Find(1);
-                ProfitLabel.Content = $"${bankAccount.AccountTotal}";
-                UnitsLabel.Content = bankAccount.DepositCount;
-
-                // Populate cars data
-                var myCars = context.Cars;
-                var carInvValue = 0.0m;
-                foreach(Car car in myCars)
+                try
                 {
-                    carInvValue += car.Msrp;
-                }
-                CarsInvValueLabel.Content = $"${carInvValue}";
-                CarsInvUnitsLabel.Content = myCars.Count();
+                    // Populate total data
+                    var bankAccount = context.BankAccounts.Find(1);
+                    ProfitLabel.Content = $"${bankAccount.AccountTotal}";
+                    UnitsLabel.Content = bankAccount.DepositCount;
 
-                // Populate boats data
-                var myBoats = context.Boats;
-                var boatInvValue = 0.0m;
-                foreach(Boat boat in myBoats)
-                {
-                    boatInvValue += boat.Msrp;
+                    // Populate cars data
+                    var myCars = context.Cars;
+                    var carInvValue = 0.0m;
+                    foreach (Car car in myCars)
+                    {
+                        carInvValue += car.Msrp;
+                    }
+                    CarsInvValueLabel.Content = $"${carInvValue}";
+                    CarsInvUnitsLabel.Content = myCars.Count();
+
+                    // Populate boats data
+                    var myBoats = context.Boats;
+                    var boatInvValue = 0.0m;
+                    foreach (Boat boat in myBoats)
+                    {
+                        boatInvValue += boat.Msrp;
+                    }
+                    BoatsInvValueLabel.Content = $"${boatInvValue}";
+                    BoatsInvUnitsLabel.Content = myBoats.Count();
                 }
-                BoatsInvValueLabel.Content = $"${boatInvValue}";
-                BoatsInvUnitsLabel.Content = myBoats.Count();
+                catch (Exception ex)
+                {
+                    Window parentWindow = this;
+                    MessageBox.Show(parentWindow, ex.ToString(), "Error populating dashboard data", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            
         }
 
-        private void CarsManageButton_Click_1(object sender, RoutedEventArgs e)
+        // Opens CarsWindow
+        private void CarsManageButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -75,8 +87,8 @@ namespace Factory
             }
         }
 
-
-        private void BoatsManageButton_Click_1(object sender, RoutedEventArgs e)
+        // Opens BoatsWindow
+        private void BoatsManageButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -93,7 +105,5 @@ namespace Factory
                 MessageBox.Show(parentWindow, ex.ToString(), "Error opening boats window", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        
     }
 }

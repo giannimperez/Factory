@@ -203,6 +203,25 @@ namespace Factory
             Update();
         }
 
+        // Changes to dashboard window
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Dashboard dashboard = new Dashboard();
+                dashboard.Left = this.Left;
+                dashboard.Top = this.Top;
+
+                this.Close();
+                dashboard.Show();
+            }
+            catch (Exception ex)
+            {
+                Window parentWindow = this;
+                MessageBox.Show(parentWindow, ex.ToString(), "Error opening dashboard window", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         /// <summary>
         /// Gets a car from database using Id acquired from a listview selection.
         /// </summary>
@@ -231,24 +250,6 @@ namespace Factory
             {
                 CarTextBox.Text = "No car selected";
                 return null;
-            }
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Dashboard dashboard = new Dashboard();
-                dashboard.Left = this.Left;
-                dashboard.Top = this.Top;
-
-                this.Close();
-                dashboard.Show();
-            }
-            catch (Exception ex)
-            {
-                Window parentWindow = this;
-                MessageBox.Show(parentWindow, ex.ToString(), "Error opening dashboard window", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
